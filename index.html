@@ -15,14 +15,21 @@
         <p class="day"></p>
         <p class="temperature"></p>
       </div>
+      <button class="toggle-set-alarm">Set Alarm</button>
 
-      <div class="set-alarm">
-        <form>
-          <input type="number" class="hour" />
-          <input type="number" class="minute" />
-          <input type="dropdown" class="sound" />
-        </form>
-      </div>
+      <form class="set-alarm">
+        <input type="number" class="hour" />
+        <input type="number" class="minute" />
+        <input type="text" class="reason" />
+        <input type="dropdown" class="sound" />
+        <button class="submit-set-alarm">Submit</button>
+      </form>
     </div>
+    <div class="alarm">
+      <h2 class="alarm-reason"></h2>
+      <button class="snooze">5 Minute Snooze</button>
+      <button class="dismiss">Dismiss</button>
+    </div>
+    <script defer src="./script.js"></script>
   </body>
 </html>
