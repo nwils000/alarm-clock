@@ -19,12 +19,17 @@ let audio = document.createElement('audio');
 let now = new Date();
 
 // HANDLING FORM DATA
-let alarmTime;
-let alarmReason;
-let alarmSound;
+let alarmTime = null;
+let alarmReason = null;
+let alarmSound = null;
 alarmTimeElement.addEventListener('input', () => {
   alarmTime = alarmTimeElement.value;
-  console.log(alarmTime);
+});
+
+// LOGIC FOR THE ALARM GOING OFF
+let submittedAlarmTime = '00:00';
+submitSetAlarmElement.addEventListener('click', () => {
+  submittedAlarmTime = alarmTime;
 });
 
 // GETTING USER LOCATION AND FETCHING TEMPERATURE FROM API
@@ -78,6 +83,12 @@ function updateCurrentDate() {
     : (currentSecond = originalSecond);
   let fullTimeString = `${currentHour}:${currentMinute}:${currentSecond}`;
   timeElement.innerHTML = fullTimeString;
+
+  // ALARM GOING OFF LOGIC
+  currentTimeForAlarm = `${currentHour}:${currentMinute}`;
+  // submittedAlarmTime === currentTimeForAlarm
+  //   ? (alarmElement.style.display = 'none')
+  //   : (alarmElement.style.display = 'block');
 }
 
 setInterval(updateCurrentDate, 500);
