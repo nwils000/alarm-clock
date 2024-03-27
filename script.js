@@ -1,3 +1,21 @@
+// VARIABLES
+let clock = document.querySelector('.clock');
+let alarm = document.querySelector('.alarm');
+let time = document.querySelector('.time'); // Assuming you want to target the time element
+let date = document.querySelector('.date');
+let day = document.querySelector('.day');
+let temperature = document.querySelector('.temperature');
+
+let setAlarm = document.querySelector('.set-alarm');
+let hour = document.querySelector('.hour');
+let minute = document.querySelector('.minute');
+let reason = document.querySelector('.reason');
+let sound = document.querySelector('.sound');
+let alarmReason = document.querySelector('.alarm-reason');
+let submitSetAlarm = document.querySelector('.submit-set-alarm');
+let snooze = document.querySelector('.snooze');
+let dismiss = document.querySelector('.dismiss');
+
 /* 
 variables: 
 clock: to hide when timer goes off. 
