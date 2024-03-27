@@ -43,13 +43,27 @@ soundChoiceElement.addEventListener('change', () => {
   alarmSoundSrc = soundChoiceElement.value;
 });
 
-let dismissPressed = false;
+let dismissed = true;
+
 dismissElement.addEventListener('click', () => {
-  if (dismissPressed === false) {
-    dismissPressed = true;
-  } else {
-    dismissPressed = false;
-  }
+  dismissed = true;
+  alarmElement.style.display = 'none';
+  alarmSoundElement.pause();
+  snoozeAlarmTime = '';
+  submittedAlarmTime = '';
+});
+
+let snoozeAlarmTime = '';
+snoozeElement.addEventListener('click', () => {
+  let now = new Date();
+  now.setMinutes(now.getMinutes() + 1);
+  let hours = now.getHours().toString().padStart(2, '0');
+  let minutes = now.getMinutes().toString().padStart(2, '0');
+  snoozeAlarmTime = `${hours}:${minutes}`;
+  alarmElement.style.display = 'none';
+  alarmSoundElement.pause();
+  dismissed = true;
+  console.log(snoozeAlarmTime);
 });
 
 // LOGIC FOR SUBMITTING ALARM FORM
@@ -57,6 +71,7 @@ let submittedAlarmTime = '';
 submitSetAlarmElement.addEventListener('click', () => {
   submittedAlarmTime = alarmTime;
   alarmSoundElement.setAttribute('src', alarmSoundSrc);
+  dismissed = false;
 });
 
 // GETTING USER LOCATION AND FETCHING TEMPERATURE FROM API
@@ -113,14 +128,19 @@ function updateCurrentDate() {
 
   // ALARM GOING OFF LOGIC
   let currentTimeForAlarm = `${currentHour}:${currentMinute}`;
-  if (submittedAlarmTime === currentTimeForAlarm && dismissPressed === false) {
+  console.log(submittedAlarmTime);
+  console.log(snoozeAlarmTime);
+  console.log(dismissed);
+
+  if (
+    (submittedAlarmTime === currentTimeForAlarm && dismissed === false) ||
+    snoozeAlarmTime === currentTimeForAlarm
+  ) {
     alarmElement.style.display = 'block';
     alarmSoundElement.play();
   } else {
     alarmSoundElement.pause();
     alarmElement.style.display = 'none';
-    dismissPressed = false;
-    submittedAlarmTime = '';
   }
 }
 updateCurrentDate();
