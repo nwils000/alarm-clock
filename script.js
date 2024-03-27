@@ -1,26 +1,41 @@
 // VARIABLES
-let clock = document.querySelector('.clock');
-let alarm = document.querySelector('.alarm');
-let time = document.querySelector('.time'); // Assuming you want to target the time element
-let date = document.querySelector('.date');
-let day = document.querySelector('.day');
-let temperature = document.querySelector('.temperature');
+let clockElement = document.querySelector('.clock');
+let alarmElement = document.querySelector('.alarm');
+let timeElement = document.querySelector('.time');
+let dateElement = document.querySelector('.date');
+let dayElement = document.querySelector('.day');
+let temperatureElement = document.querySelector('.temperature');
 
-let setAlarm = document.querySelector('.set-alarm');
-let hour = document.querySelector('.hour');
-let minute = document.querySelector('.minute');
-let reason = document.querySelector('.reason');
-let sound = document.querySelector('.sound');
-let alarmReason = document.querySelector('.alarm-reason');
-let submitSetAlarm = document.querySelector('.submit-set-alarm');
-let snooze = document.querySelector('.snooze');
-let dismiss = document.querySelector('.dismiss');
+let setAlarmElement = document.querySelector('.set-alarm');
+let hourElement = document.querySelector('.hour');
+let minuteElement = document.querySelector('.minute');
+let reasonElement = document.querySelector('.reason');
+let soundElement = document.querySelector('.sound');
+let alarmReasonElement = document.querySelector('.alarm-reason');
+let submitSetAlarmElement = document.querySelector('.submit-set-alarm');
+let snoozeElement = document.querySelector('.snooze');
+let dismissElement = document.querySelector('.dismiss');
 
 let audio = document.createElement('audio');
+
+let now = new Date();
+
+function updateCurrentDate() {
+  let now = new Date();
+  let currentHour = now.getHours();
+  let currentMinute = now.getMinutes();
+  let currentSecond = now.getSeconds();
+}
+
+setInterval(updateCurrentDate, 500);
+
 /* 
 variables: 
 
 userAlarmTime: combine the hour and minute into usable data
+
+
+
 
 
 COMPLETED:
