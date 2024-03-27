@@ -18,10 +18,14 @@
       <button class="toggle-set-alarm">Set Alarm</button>
 
       <form class="set-alarm">
-        <input type="number" class="hour" />
-        <input type="number" class="minute" />
-        <input type="text" class="reason" />
-        <input type="dropdown" class="sound" />
+        <label for="hour">Hour</label>
+        <input type="number" id="hour" class="hour" />
+        <label for="minute">Minute</label>
+        <input type="number" id="minute" class="minute" />
+        <label for="reason">Reason</label>
+        <input type="text" id="reason" class="reason" />
+        <label for="sound">Sound</label>
+        <select id="sound" class="sound"></select>
         <button class="submit-set-alarm">Submit</button>
       </form>
     </div>
