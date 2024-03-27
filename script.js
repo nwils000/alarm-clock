@@ -22,9 +22,26 @@ let now = new Date();
 
 function updateCurrentDate() {
   let now = new Date();
-  let currentHour = now.getHours();
-  let currentMinute = now.getMinutes();
-  let currentSecond = now.getSeconds();
+  let originalHour = now.getHours();
+  let currentHour;
+  originalHour.toString().length === 1
+    ? (currentHour = `0${originalHour}`)
+    : (currentHour = originalHour);
+  originalHour > 12
+    ? (currentHour = originalHour - 12)
+    : (currentHour = originalHour);
+  let originalMinute = now.getMinutes();
+  let currentMinute;
+  originalMinute.toString().length === 1
+    ? (currentMinute = `0${originalMinute}`)
+    : (currentMinute = originalMinute);
+  let originalSecond = now.getSeconds();
+  let currentSecond;
+  originalSecond.toString().length === 1
+    ? (currentSecond = `0${originalSecond}`)
+    : (currentSecond = originalSecond);
+  let fullTimeString = `${currentHour}:${currentMinute}:${currentSecond}`;
+  timeElement.innerHTML = fullTimeString;
 }
 
 setInterval(updateCurrentDate, 500);
