@@ -3,12 +3,12 @@ let clockElement = document.querySelector('.clock');
 let alarmElement = document.querySelector('.alarm');
 let timeElement = document.querySelector('.time');
 let dateElement = document.querySelector('.date');
-let dayElement = document.querySelector('.day');
 let temperatureElement = document.querySelector('.temperature');
 
 let setAlarmElement = document.querySelector('.set-alarm');
 let hourElement = document.querySelector('.hour');
 let minuteElement = document.querySelector('.minute');
+let getLocalTemperature = document.querySelector('.get-temperature-btn');
 let reasonElement = document.querySelector('.reason');
 let soundElement = document.querySelector('.sound');
 let alarmReasonElement = document.querySelector('.alarm-reason');
@@ -17,8 +17,37 @@ let snoozeElement = document.querySelector('.snooze');
 let dismissElement = document.querySelector('.dismiss');
 
 let audio = document.createElement('audio');
-
 let now = new Date();
+
+getLocalTemperature.addEventListener('click', () => {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(showPosition);
+  } else {
+    coordinates.innerHTML = "Couldn't get your coordinates!";
+  }
+
+  function showPosition(position) {
+    fetch(
+      `https://api.open-meteo.com/v1/forecast?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&hourly=temperature_2m`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        const temperaturesArray = data.hourly.temperature_2m;
+
+        temperatureElement.innerHTML = '';
+
+        temperatureElement.innerHTML = `${(
+          temperaturesArray[now.getHours()] * (9 / 5) +
+          32
+        ).toFixed(2)}°F`;
+      });
+  }
+});
+
+let month = now.getMonth() + 1;
+let dayOfMonth = now.getDate();
+let date = `${month}/${dayOfMonth}`;
+dateElement.innerHTML = date;
 
 function updateCurrentDate() {
   let now = new Date();
