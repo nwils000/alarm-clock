@@ -22,25 +22,22 @@ let now = new Date();
 getLocalTemperature.addEventListener('click', () => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
+    function showPosition(position) {
+      fetch(
+        `https://api.open-meteo.com/v1/forecast?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&hourly=temperature_2m`
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          getLocalTemperature.style.display = 'none';
+          const temperaturesArray = data.hourly.temperature_2m;
+          temperatureElement.innerHTML = `${(
+            temperaturesArray[now.getHours()] * (9 / 5) +
+            32
+          ).toFixed(2)}°F`;
+        });
+    }
   } else {
-    coordinates.innerHTML = "Couldn't get your coordinates!";
-  }
-
-  function showPosition(position) {
-    fetch(
-      `https://api.open-meteo.com/v1/forecast?latitude=${position.coords.latitude}&longitude=${position.coords.longitude}&hourly=temperature_2m`
-    )
-      .then((res) => res.json())
-      .then((data) => {
-        const temperaturesArray = data.hourly.temperature_2m;
-
-        temperatureElement.innerHTML = '';
-
-        temperatureElement.innerHTML = `${(
-          temperaturesArray[now.getHours()] * (9 / 5) +
-          32
-        ).toFixed(2)}°F`;
-      });
+    getLocalTemperature.style.display = 'default';
   }
 });
 
