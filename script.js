@@ -6,8 +6,7 @@ let dateElement = document.querySelector('.date');
 let temperatureElement = document.querySelector('.temperature');
 
 let setAlarmElement = document.querySelector('.set-alarm');
-let hourElement = document.querySelector('.hour');
-let minuteElement = document.querySelector('.minute');
+let alarmTimeElement = document.querySelector('.alarm-time');
 let getLocalTemperature = document.querySelector('.get-temperature-btn');
 let reasonElement = document.querySelector('.reason');
 let soundElement = document.querySelector('.sound');
@@ -19,6 +18,16 @@ let dismissElement = document.querySelector('.dismiss');
 let audio = document.createElement('audio');
 let now = new Date();
 
+// HANDLING FORM DATA
+let alarmTime;
+let alarmReason;
+let alarmSound;
+alarmTimeElement.addEventListener('input', () => {
+  alarmTime = alarmTimeElement.value;
+  console.log(alarmTime);
+});
+
+// GETTING USER LOCATION AND FETCHING TEMPERATURE FROM API
 getLocalTemperature.addEventListener('click', () => {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(showPosition);
@@ -46,6 +55,7 @@ let dayOfMonth = now.getDate();
 let date = `${month}/${dayOfMonth}`;
 dateElement.innerHTML = date;
 
+// UPDATING THE TIME EVERY .5 SECONDS
 function updateCurrentDate() {
   let now = new Date();
   let originalHour = now.getHours();
@@ -71,32 +81,3 @@ function updateCurrentDate() {
 }
 
 setInterval(updateCurrentDate, 500);
-
-/* 
-variables: 
-
-userAlarmTime: combine the hour and minute into usable data
-
-
-
-
-
-COMPLETED:
-*clock: to hide when timer goes off. 
-*alarm: to display when timer goes off.
-*time: to add the current time
-*date: to add the current date
-*day: to add the current day
-*temperature: to add the current temperature
-*setAlarm: display when user clicks toggleSetAlarm
-*hour: interpret the hour input
-*minute: interpret the minute input
-*reason: use to display in .alarm-reason element
-*sound: use to decide what source to give to an audio element
-*alarmReason: the h2 element that needs to be populated with reason
-*audio: use to create an audio element
-*submitSetAlarm: use to toggle the clock and alarm displays and pass the correct data to alarm
-*snooze: add new alarm with teh exact same data for 5 minutes
-*dismiss: remove the alarm and redisplay the clock
-
-*/
