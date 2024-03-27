@@ -20,9 +20,9 @@ let audio = document.createElement('audio');
 let now = new Date();
 
 // HANDLING FORM DATA
-let alarmTime = null;
+let alarmTime = alarmTimeElement.value;
 let alarmReason = null;
-let alarmSoundSrc = null;
+let alarmSoundSrc = soundChoiceElement.value;
 alarmTimeElement.addEventListener('input', () => {
   alarmTime = alarmTimeElement.value;
 });
