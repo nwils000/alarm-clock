@@ -30,11 +30,19 @@ cancelSetAlarmElement.addEventListener('click', () => {
 });
 
 // HANDLING FORM DATA
-let alarmTime = alarmTimeElement.value;
+let alarmTime;
 let alarmReason = null;
 let alarmSoundSrc = soundChoiceElement.value;
 alarmTimeElement.addEventListener('input', () => {
-  alarmTime = alarmTimeElement.value;
+  if (Number(alarmTimeElement.value.split(':')[0]) > 12) {
+    alarmTimeHourNumber = Number(alarmTimeElement.value.split(':')[0]) - 12;
+    alarmTime = `${alarmTimeHourNumber}:${
+      alarmTimeElement.value.split(':')[1]
+    }`;
+    console.log(alarmTime);
+  } else {
+    alarmTime = alarmTimeElement.value;
+  }
 });
 reasonElement.addEventListener('input', () => {
   alarmReason = reasonElement.value;
@@ -63,7 +71,6 @@ snoozeElement.addEventListener('click', () => {
   alarmElement.style.display = 'none';
   alarmSoundElement.pause();
   dismissed = true;
-  console.log(snoozeAlarmTime);
 });
 
 // LOGIC FOR SUBMITTING ALARM FORM
@@ -128,9 +135,6 @@ function updateCurrentDate() {
 
   // ALARM GOING OFF LOGIC
   let currentTimeForAlarm = `${currentHour}:${currentMinute}`;
-  console.log(submittedAlarmTime);
-  console.log(snoozeAlarmTime);
-  console.log(dismissed);
 
   if (
     (submittedAlarmTime === currentTimeForAlarm && dismissed === false) ||
