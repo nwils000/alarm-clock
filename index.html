@@ -22,12 +22,23 @@
         <input type="time" class="alarm-time" />
         <label for="reason">Reason</label>
         <input type="text" id="reason" class="reason" />
-        <label for="sound">Sound</label>
-        <select id="sound" class="sound"></select>
+        <label for="sound-choice">Sound</label>
+        <select id="sound-choice" class="sound-choice">
+          <option class="classic-alarm" value="./assets/classic.mp3">
+            Classic
+          </option>
+          <option class="electro-alarm" value="./assets/electro.mp3">
+            Electro
+          </option>
+          <option class="school-bell-alarm" value="./assets/school-bell.mp3">
+            School Bell
+          </option>
+        </select>
       </form>
       <button class="submit-set-alarm">Submit</button>
     </div>
     <div class="alarm">
+      <audio class="alarm-sound"></audio>
       <h2 class="alarm-reason"></h2>
       <button class="snooze">5 Minute Snooze</button>
       <button class="dismiss">Dismiss</button>

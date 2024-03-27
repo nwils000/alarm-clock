@@ -9,11 +9,12 @@ let setAlarmElement = document.querySelector('.set-alarm');
 let alarmTimeElement = document.querySelector('.alarm-time');
 let getLocalTemperature = document.querySelector('.get-temperature-btn');
 let reasonElement = document.querySelector('.reason');
-let soundElement = document.querySelector('.sound');
+let soundChoiceElement = document.querySelector('.sound-choice');
 let alarmReasonElement = document.querySelector('.alarm-reason');
 let submitSetAlarmElement = document.querySelector('.submit-set-alarm');
 let snoozeElement = document.querySelector('.snooze');
 let dismissElement = document.querySelector('.dismiss');
+let alarmSoundElement = document.querySelector('.alarm-sound');
 
 let audio = document.createElement('audio');
 let now = new Date();
@@ -21,15 +22,31 @@ let now = new Date();
 // HANDLING FORM DATA
 let alarmTime = null;
 let alarmReason = null;
-let alarmSound = null;
+let alarmSoundSrc = null;
 alarmTimeElement.addEventListener('input', () => {
   alarmTime = alarmTimeElement.value;
 });
+reasonElement.addEventListener('input', () => {
+  alarmReason = reasonElement.value;
+});
+soundChoiceElement.addEventListener('change', () => {
+  alarmSoundSrc = soundChoiceElement.value;
+});
 
-// LOGIC FOR THE ALARM GOING OFF
-let submittedAlarmTime = '00:00';
+let dismissPressed = false;
+dismissElement.addEventListener('click', () => {
+  if (dismissPressed === false) {
+    dismissPressed = true;
+  } else {
+    dismissPressed = false;
+  }
+});
+
+// LOGIC FOR SUBMITTING ALARM FORM
+let submittedAlarmTime = '';
 submitSetAlarmElement.addEventListener('click', () => {
   submittedAlarmTime = alarmTime;
+  alarmSoundElement.setAttribute('src', alarmSoundSrc);
 });
 
 // GETTING USER LOCATION AND FETCHING TEMPERATURE FROM API
@@ -85,10 +102,16 @@ function updateCurrentDate() {
   timeElement.innerHTML = fullTimeString;
 
   // ALARM GOING OFF LOGIC
-  currentTimeForAlarm = `${currentHour}:${currentMinute}`;
-  // submittedAlarmTime === currentTimeForAlarm
-  //   ? (alarmElement.style.display = 'none')
-  //   : (alarmElement.style.display = 'block');
+  let currentTimeForAlarm = `${currentHour}:${currentMinute}`;
+  if (submittedAlarmTime === currentTimeForAlarm && dismissPressed === false) {
+    alarmElement.style.display = 'block';
+    alarmSoundElement.play();
+  } else {
+    alarmSoundElement.pause();
+    alarmElement.style.display = 'none';
+    dismissPressed = false;
+    submittedAlarmTime = '';
+  }
 }
 
 setInterval(updateCurrentDate, 500);
