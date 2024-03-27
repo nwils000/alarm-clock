@@ -113,5 +113,6 @@ function updateCurrentDate() {
     submittedAlarmTime = '';
   }
 }
+updateCurrentDate();
 
 setInterval(updateCurrentDate, 500);
