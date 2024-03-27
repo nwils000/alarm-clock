@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Alarm Clock</title>
+    <link rel="stylesheet" href="./styles/main.css" />
   </head>
   <body>
     <div class="clock">
@@ -16,26 +17,28 @@
         <p class="temperature"></p>
       </div>
       <button class="toggle-set-alarm">Set New Alarm</button>
-
-      <form class="set-alarm">
-        <label for="alarm-time"></label>
-        <input type="time" class="alarm-time" />
-        <label for="reason">Reason</label>
-        <input type="text" id="reason" class="reason" />
-        <label for="sound-choice">Sound</label>
-        <select id="sound-choice" class="sound-choice">
-          <option class="classic-alarm" value="./assets/classic.mp3">
-            Classic
-          </option>
-          <option class="electro-alarm" value="./assets/electro.mp3">
-            Electro
-          </option>
-          <option class="school-bell-alarm" value="./assets/school-bell.mp3">
-            School Bell
-          </option>
-        </select>
-      </form>
-      <button class="submit-set-alarm">Submit</button>
+      <div class="set-alarm">
+        <form>
+          <label for="alarm-time"></label>
+          <input type="time" class="alarm-time" />
+          <label for="reason">Reason</label>
+          <input type="text" id="reason" class="reason" />
+          <label for="sound-choice">Sound</label>
+          <select id="sound-choice" class="sound-choice">
+            <option class="classic-alarm" value="./assets/classic.mp3">
+              Classic
+            </option>
+            <option class="electro-alarm" value="./assets/electro.mp3">
+              Electro
+            </option>
+            <option class="school-bell-alarm" value="./assets/school-bell.mp3">
+              School Bell
+            </option>
+          </select>
+        </form>
+        <button class="submit-set-alarm">Submit</button>
+        <button class="cancel-set-alarm">X</button>
+      </div>
     </div>
     <div class="alarm">
       <audio class="alarm-sound"></audio>
@@ -43,6 +46,6 @@
       <button class="snooze">5 Minute Snooze</button>
       <button class="dismiss">Dismiss</button>
     </div>
-    <script defer src="./script.js"></script>
+    <script defer src="./scripts/script.js"></script>
   </body>
 </html>

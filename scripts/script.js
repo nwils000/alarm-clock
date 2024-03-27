@@ -4,6 +4,8 @@ let alarmElement = document.querySelector('.alarm');
 let timeElement = document.querySelector('.time');
 let dateElement = document.querySelector('.date');
 let temperatureElement = document.querySelector('.temperature');
+let toggleSetAlarmElement = document.querySelector('.toggle-set-alarm');
+let cancelSetAlarmElement = document.querySelector('.cancel-set-alarm');
 
 let setAlarmElement = document.querySelector('.set-alarm');
 let alarmTimeElement = document.querySelector('.alarm-time');
@@ -18,6 +20,14 @@ let alarmSoundElement = document.querySelector('.alarm-sound');
 
 let audio = document.createElement('audio');
 let now = new Date();
+
+// OPENING NEW ALARM FORM
+toggleSetAlarmElement.addEventListener('click', () => {
+  setAlarmElement.style.display = 'block';
+});
+cancelSetAlarmElement.addEventListener('click', () => {
+  setAlarmElement.style.display = 'none';
+});
 
 // HANDLING FORM DATA
 let alarmTime = alarmTimeElement.value;
