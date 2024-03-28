@@ -34,6 +34,8 @@ class Alarm {
   }
 }
 
+let upcomingAlarms = [];
+
 // OPENING NEW ALARM FORM
 toggleSetAlarmElement.addEventListener('click', () => {
   setAlarmElement.style.display = 'block';
