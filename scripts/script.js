@@ -58,8 +58,12 @@ function renderAlarms() {
   currentAlarmsListElement.innerHTML = '';
 
   allSetAlarms.forEach((alarm) => {
+    let hours = alarm.time.split(':')[0];
+    let minutes = alarm.time.split(':')[1];
+    let formattedHours = parseInt(hours, 10).toString();
+    let formattedTime = `${formattedHours}:${minutes}`;
     let listItem = document.createElement('li');
-    listItem.innerText = `${alarm.time} - ${alarm.reason}`;
+    listItem.innerText = `${formattedTime} - ${alarm.reason}`;
 
     let deleteButton = document.createElement('button');
     deleteButton.innerText = 'Delete';
@@ -118,18 +122,29 @@ dismissElement.addEventListener('click', () => {
 
 snoozeElement.addEventListener('click', () => {
   let now = new Date();
-  now.setMinutes(now.getMinutes() + 5);
-  let hours = now.getHours().toString().padStart(2, '0');
-  let minutes = now.getMinutes().toString().padStart(2, '0');
+  now.setMinutes(now.getMinutes() + 1);
 
-  let alarmGoingOff = allSetAlarms.find((alarm) => {
+  let hours = now.getHours();
+  let minutes = now.getMinutes();
+
+  if (hours > 12) {
+    hours -= 12;
+  }
+
+  let snoozeTime = `${hours.toString().padStart(2, '0')}:${minutes
+    .toString()
+    .padStart(2, '0')}`;
+
+  let alarmGoingOffIndex = allSetAlarms.findIndex((alarm) => {
     return !alarm.dismissed && alarm.time === currentTimeForAlarm;
   });
-  if (alarmGoingOff) {
-    alarmGoingOff.isPlaying = false;
-    alarmGoingOff.time = `${hours}:${minutes}`;
-    console.log(alarmGoingOff.time);
+
+  if (alarmGoingOffIndex !== -1) {
+    allSetAlarms[alarmGoingOffIndex].isPlaying = false;
+    allSetAlarms[alarmGoingOffIndex].time = snoozeTime;
+    renderAlarms();
   }
+
   alarmElement.style.display = 'none';
   alarmSoundElement.pause();
 });
@@ -173,30 +188,21 @@ let currentTimeForAlarm;
 function updateCurrentDate() {
   let now = new Date();
   let originalHour = now.getHours();
-  let currentHour;
-  originalHour.toString().length === 1
-    ? (currentHour = `0${originalHour}`)
-    : (currentHour = originalHour);
+  originalHour = originalHour.toString().padStart(2, '0');
   originalHour > 12
-    ? (currentHour = originalHour - 12)
-    : (currentHour = originalHour);
+    ? (originalHour = `${Number(originalHour - 12)}`)
+    : (originalHour = originalHour);
   let originalMinute = now.getMinutes();
-  let currentMinute;
-  originalMinute.toString().length === 1
-    ? (currentMinute = `0${originalMinute}`)
-    : (currentMinute = originalMinute);
+  originalMinute = originalMinute.toString().padStart(2, '0');
   let originalSecond = now.getSeconds();
-  let currentSecond;
-  originalSecond.toString().length === 1
-    ? (currentSecond = `0${originalSecond}`)
-    : (currentSecond = originalSecond);
-  let fullTimeString = `${currentHour}:${currentMinute}:${currentSecond}`;
+  originalSecond = originalSecond.toString().padStart(2, '0');
+  let fullTimeString = `${originalHour}:${originalMinute}:${originalSecond}`;
   timeElement.innerHTML = fullTimeString;
 
   console.log(allSetAlarms);
 
   // ALARM GOING OFF LOGIC
-  currentTimeForAlarm = `${currentHour}:${currentMinute}`;
+  currentTimeForAlarm = `${originalHour}:${originalMinute}`;
   allSetAlarms.forEach((alarm, index) => {
     if (
       alarm.time === currentTimeForAlarm &&
@@ -220,3 +226,4 @@ setInterval(updateCurrentDate, 1000);
 
 // I want submit to close the form
 // I want the alarm noise to keep going off until the minute is over
+// WHen i snooze i want it to visually update on screen
