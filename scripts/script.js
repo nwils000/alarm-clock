@@ -41,7 +41,10 @@ alarmTimeElement.addEventListener('input', () => {
     }`;
     console.log(alarmTime);
   } else {
-    alarmTime = alarmTimeElement.value;
+    alarmTime = `${parseInt(alarmTimeElement.value.split(':')[0], 10)}:${
+      alarmTimeElement.value.split(':')[1]
+    }`;
+    console.log(alarmTime);
   }
 });
 reasonElement.addEventListener('input', () => {
@@ -136,6 +139,8 @@ function updateCurrentDate() {
   // ALARM GOING OFF LOGIC
   let currentTimeForAlarm = `${currentHour}:${currentMinute}`;
 
+  console.log(`1 ${submittedAlarmTime}`);
+  console.log(`2 ${currentTimeForAlarm}`);
   if (
     (submittedAlarmTime === currentTimeForAlarm && dismissed === false) ||
     snoozeAlarmTime === currentTimeForAlarm
