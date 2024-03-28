@@ -122,7 +122,7 @@ dismissElement.addEventListener('click', () => {
 
 snoozeElement.addEventListener('click', () => {
   let now = new Date();
-  now.setMinutes(now.getMinutes() + 1);
+  now.setMinutes(now.getMinutes() + 5);
 
   let hours = now.getHours();
   let minutes = now.getMinutes();
