@@ -176,7 +176,7 @@ getLocalTemperature.addEventListener('click', () => {
   }
 });
 
-let month = now.getMonth() + 1;
+let month = now.getMonth() + 5;
 let dayOfMonth = now.getDate();
 let date = `${month}/${dayOfMonth}`;
 dateElement.innerHTML = date;
