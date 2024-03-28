@@ -6,6 +6,7 @@ let dateElement = document.querySelector('.date');
 let temperatureElement = document.querySelector('.temperature');
 let toggleSetAlarmElement = document.querySelector('.toggle-set-alarm');
 let cancelSetAlarmElement = document.querySelector('.cancel-set-alarm');
+let currentAlarmsListElement = document.querySelector('.current-alarms-list');
 
 let setAlarmElement = document.querySelector('.set-alarm');
 let alarmTimeElement = document.querySelector('.alarm-time');
@@ -94,10 +95,14 @@ snoozeElement.addEventListener('click', () => {
 });
 
 // LOGIC FOR SUBMITTING ALARM FORM
-
 submitSetAlarmElement.addEventListener('click', () => {
   const newAlarm = new Alarm(alarmTime, alarmReason, alarmSoundSrc);
   allSetAlarms.push(newAlarm);
+  // DISPLAYING CURRENT ALARMS LIST
+  let currentAlarm = allSetAlarms[allSetAlarms.length - 1];
+  let currentAlarmsListItem = document.createElement('li');
+  currentAlarmsListItem.innerText = `${currentAlarm.time}${currentAlarm.reason}`;
+  currentAlarmsListElement.appendChild(currentAlarmsListItem);
 });
 
 // GETTING USER LOCATION AND FETCHING TEMPERATURE FROM API
@@ -176,3 +181,6 @@ function updateCurrentDate() {
 updateCurrentDate();
 
 setInterval(updateCurrentDate, 500);
+
+// I want submit to close the form
+// I want the alarm noise to keep going off until the minute is over
