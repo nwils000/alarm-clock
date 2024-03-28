@@ -220,7 +220,7 @@ function updateCurrentDate() {
 }
 updateCurrentDate();
 
-setInterval(updateCurrentDate, 1000);
+setInterval(updateCurrentDate, 500);
 
 // I want submit to close the form
 // I want the alarm noise to keep going off until the minute is over
