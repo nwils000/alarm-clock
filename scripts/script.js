@@ -131,9 +131,7 @@ snoozeElement.addEventListener('click', () => {
     hours -= 12;
   }
 
-  let snoozeTime = `${hours.toString().padStart(2, '0')}:${minutes
-    .toString()
-    .padStart(2, '0')}`;
+  let snoozeTime = `${hours.toString()}:${minutes.toString().padStart(2, '0')}`;
 
   let alarmGoingOffIndex = allSetAlarms.findIndex((alarm) => {
     return !alarm.dismissed && alarm.time === currentTimeForAlarm;
