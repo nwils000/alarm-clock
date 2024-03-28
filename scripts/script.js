@@ -25,16 +25,52 @@ let now = new Date();
 let allSetAlarms = [];
 
 class Alarm {
-  constructor(time, reason, audio) {
+  static lastId = 0;
+  constructor(time, reason, audio, id) {
     this.time = time;
     this.reason = reason;
     this.audio = audio;
+    this.id = ++Alarm.lastId;
     this.dismissed = false;
     this.isPlaying = false;
   }
 }
 
 let upcomingAlarms = [];
+// UPDATING UPCOMING ALARMS ARRAY
+
+function removeAlarm(id) {
+  allSetAlarms = allSetAlarms.filter((alarm) => alarm.id !== id);
+  renderAlarms();
+}
+
+function addAlarm(element) {
+  allSetAlarms.push(element);
+  renderAlarms();
+}
+
+function modifyAlarmTime(index, newTime) {
+  allSetAlarms[index].time = newTime;
+  renderAlarms();
+}
+
+function renderAlarms() {
+  currentAlarmsListElement.innerHTML = '';
+
+  allSetAlarms.forEach((alarm) => {
+    let listItem = document.createElement('li');
+    listItem.innerText = `${alarm.time} - ${alarm.reason}`;
+
+    let deleteButton = document.createElement('button');
+    deleteButton.innerText = 'Delete';
+    deleteButton.onclick = () => {
+      removeAlarm(alarm.id);
+    };
+
+    listItem.appendChild(deleteButton);
+    currentAlarmsListElement.appendChild(listItem);
+  });
+}
 
 // OPENING NEW ALARM FORM
 toggleSetAlarmElement.addEventListener('click', () => {
@@ -68,7 +104,7 @@ soundChoiceElement.addEventListener('change', () => {
 });
 
 dismissElement.addEventListener('click', () => {
-  let alarmGoingOff = allSetAlarms.find((alarm) => {
+  let alarmGoingOff = allSetAlarms.findIndex((alarm) => {
     return !alarm.dismissed && alarm.time === currentTimeForAlarm;
   });
   if (alarmGoingOff) {
@@ -76,6 +112,8 @@ dismissElement.addEventListener('click', () => {
   }
   alarmElement.style.display = 'none';
   alarmSoundElement.pause();
+  console.log(alarmGoingOff);
+  removeAlarm(allSetAlarms[alarmGoingOff].id);
 });
 
 snoozeElement.addEventListener('click', () => {
@@ -99,13 +137,7 @@ snoozeElement.addEventListener('click', () => {
 // LOGIC FOR SUBMITTING ALARM FORM
 submitSetAlarmElement.addEventListener('click', () => {
   const newAlarm = new Alarm(alarmTime, alarmReason, alarmSoundSrc);
-  allSetAlarms.push(newAlarm);
-  // DISPLAYING CURRENT ALARMS LIST
-  let currentAlarm = allSetAlarms[allSetAlarms.length - 1];
-  upcomingAlarms.push(currentAlarm);
-  let currentAlarmsListItem = document.createElement('li');
-  currentAlarmsListItem.innerText = `${currentAlarm.time}${currentAlarm.reason}`;
-  currentAlarmsListElement.appendChild(currentAlarmsListItem);
+  addAlarm(newAlarm);
 });
 
 // GETTING USER LOCATION AND FETCHING TEMPERATURE FROM API
@@ -161,9 +193,10 @@ function updateCurrentDate() {
   let fullTimeString = `${currentHour}:${currentMinute}:${currentSecond}`;
   timeElement.innerHTML = fullTimeString;
 
+  console.log(allSetAlarms);
+
   // ALARM GOING OFF LOGIC
   currentTimeForAlarm = `${currentHour}:${currentMinute}`;
-  // console.log(allSetAlarms);
   allSetAlarms.forEach((alarm, index) => {
     if (
       alarm.time === currentTimeForAlarm &&
