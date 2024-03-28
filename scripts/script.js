@@ -21,6 +21,18 @@ let alarmSoundElement = document.querySelector('.alarm-sound');
 let audio = document.createElement('audio');
 let now = new Date();
 
+let allSetAlarms = [];
+
+class Alarm {
+  constructor(time, reason, audio) {
+    this.time = time;
+    this.reason = reason;
+    this.audio = audio;
+    this.dismissed = false;
+    this.isPlaying = false;
+  }
+}
+
 // OPENING NEW ALARM FORM
 toggleSetAlarmElement.addEventListener('click', () => {
   setAlarmElement.style.display = 'block';
@@ -39,12 +51,10 @@ alarmTimeElement.addEventListener('input', () => {
     alarmTime = `${alarmTimeHourNumber}:${
       alarmTimeElement.value.split(':')[1]
     }`;
-    console.log(alarmTime);
   } else {
     alarmTime = `${parseInt(alarmTimeElement.value.split(':')[0], 10)}:${
       alarmTimeElement.value.split(':')[1]
     }`;
-    console.log(alarmTime);
   }
 });
 reasonElement.addEventListener('input', () => {
@@ -54,34 +64,40 @@ soundChoiceElement.addEventListener('change', () => {
   alarmSoundSrc = soundChoiceElement.value;
 });
 
-let dismissed = true;
-
 dismissElement.addEventListener('click', () => {
-  dismissed = true;
+  let alarmGoingOff = allSetAlarms.find((alarm) => {
+    return !alarm.dismissed && alarm.time === currentTimeForAlarm;
+  });
+  if (alarmGoingOff) {
+    alarmGoingOff.dismissed = true;
+  }
   alarmElement.style.display = 'none';
   alarmSoundElement.pause();
-  snoozeAlarmTime = '';
-  submittedAlarmTime = '';
 });
 
-let snoozeAlarmTime = '';
 snoozeElement.addEventListener('click', () => {
   let now = new Date();
-  now.setMinutes(now.getMinutes() + 1);
+  now.setMinutes(now.getMinutes() + 5);
   let hours = now.getHours().toString().padStart(2, '0');
   let minutes = now.getMinutes().toString().padStart(2, '0');
-  snoozeAlarmTime = `${hours}:${minutes}`;
+
+  let alarmGoingOff = allSetAlarms.find((alarm) => {
+    return !alarm.dismissed && alarm.time === currentTimeForAlarm;
+  });
+  if (alarmGoingOff) {
+    alarmGoingOff.isPlaying = false;
+    alarmGoingOff.time = `${hours}:${minutes}`;
+    console.log(alarmGoingOff.time);
+  }
   alarmElement.style.display = 'none';
   alarmSoundElement.pause();
-  dismissed = true;
 });
 
 // LOGIC FOR SUBMITTING ALARM FORM
-let submittedAlarmTime = '';
+
 submitSetAlarmElement.addEventListener('click', () => {
-  submittedAlarmTime = alarmTime;
-  alarmSoundElement.setAttribute('src', alarmSoundSrc);
-  dismissed = false;
+  const newAlarm = new Alarm(alarmTime, alarmReason, alarmSoundSrc);
+  allSetAlarms.push(newAlarm);
 });
 
 // GETTING USER LOCATION AND FETCHING TEMPERATURE FROM API
@@ -112,6 +128,7 @@ let dayOfMonth = now.getDate();
 let date = `${month}/${dayOfMonth}`;
 dateElement.innerHTML = date;
 
+let currentTimeForAlarm;
 // UPDATING THE TIME EVERY .5 SECONDS
 function updateCurrentDate() {
   let now = new Date();
@@ -137,20 +154,24 @@ function updateCurrentDate() {
   timeElement.innerHTML = fullTimeString;
 
   // ALARM GOING OFF LOGIC
-  let currentTimeForAlarm = `${currentHour}:${currentMinute}`;
+  currentTimeForAlarm = `${currentHour}:${currentMinute}`;
+  // console.log(allSetAlarms);
+  allSetAlarms.forEach((alarm, index) => {
+    if (
+      alarm.time === currentTimeForAlarm &&
+      alarm.dismissed === false &&
+      !alarm.isPlaying
+    ) {
+      alarmElement.style.display = 'block';
+      alarmSoundElement.setAttribute('src', alarm.audio);
+      if (alarm.dismissed === false && alarmSoundElement.paused) {
+        alarm.isPlaying = true;
+        alarmSoundElement.play();
+      }
 
-  console.log(`1 ${submittedAlarmTime}`);
-  console.log(`2 ${currentTimeForAlarm}`);
-  if (
-    (submittedAlarmTime === currentTimeForAlarm && dismissed === false) ||
-    snoozeAlarmTime === currentTimeForAlarm
-  ) {
-    alarmElement.style.display = 'block';
-    alarmSoundElement.play();
-  } else {
-    alarmSoundElement.pause();
-    alarmElement.style.display = 'none';
-  }
+      alarmReasonElement.innerHTML = alarm.reason;
+    }
+  });
 }
 updateCurrentDate();
 
