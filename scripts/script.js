@@ -102,6 +102,7 @@ submitSetAlarmElement.addEventListener('click', () => {
   allSetAlarms.push(newAlarm);
   // DISPLAYING CURRENT ALARMS LIST
   let currentAlarm = allSetAlarms[allSetAlarms.length - 1];
+  upcomingAlarms.push(currentAlarm);
   let currentAlarmsListItem = document.createElement('li');
   currentAlarmsListItem.innerText = `${currentAlarm.time}${currentAlarm.reason}`;
   currentAlarmsListElement.appendChild(currentAlarmsListItem);
@@ -182,7 +183,7 @@ function updateCurrentDate() {
 }
 updateCurrentDate();
 
-setInterval(updateCurrentDate, 500);
+setInterval(updateCurrentDate, 1000);
 
 // I want submit to close the form
 // I want the alarm noise to keep going off until the minute is over
