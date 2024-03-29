@@ -1,4 +1,4 @@
-// VARIABLES
+// GLOBAL VARIABLES
 let clockElement = document.querySelector('.clock');
 let alarmElement = document.querySelector('.alarm');
 let timeElement = document.querySelector('.time');
@@ -14,7 +14,6 @@ let currentAlarmsListEditElement = document.querySelector(
   '.current-alarms-list-edit'
 );
 let manualDeleteButton = document.querySelector('.manual-delete-button');
-
 let setAlarmElement = document.querySelector('.set-alarm');
 let editAlarmElement = document.querySelector('.edit-alarm');
 let alarmTimeElement = document.querySelector('.alarm-time');
@@ -29,85 +28,145 @@ let submitSetAlarmElement = document.querySelector('.submit-set-alarm');
 let snoozeElement = document.querySelector('.snooze');
 let dismissElement = document.querySelector('.dismiss');
 let alarmSoundElement = document.querySelector('.alarm-sound');
-
-let audio = document.createElement('audio');
 let now = new Date();
 
-let allSetAlarms = [];
+// ALARM CONSTRUCTOR
 
 class Alarm {
   static lastId = 0;
   constructor(time, label, audio) {
+    this.id = ++Alarm.lastId;
     this.time = time;
     this.label = label;
     this.audio = audio;
-    this.id = ++Alarm.lastId;
     this.dismissed = false;
     this.isPlaying = false;
-    this.disabled = false;
+  }
+  snooze() {
+    let [hours, minutes] = this.time.split(':').map((x) => parseInt(x));
+    minutes += 5;
+    if (minutes >= 60) {
+      hours = (hours + 1) % 24;
+      minutes -= 60;
+    }
+    this.time = `${hours.toString().padStart(2, '0')}:${minutes
+      .toString()
+      .padStart(2, '0')}`;
+    this.dismissed = false;
+    this.isPlaying = false;
+  }
+
+  dismiss() {
+    this.dismissed = true;
+    this.isPlaying = false;
+    alarmElement.style.display = 'none';
+    alarmSoundElement.pause();
+  }
+  enable() {
+    this.dismissed = false;
   }
 }
 
-let upcomingAlarms = [];
-// UPDATING UPCOMING ALARMS ARRAY
+// INITIALIZE ARRAY OF ALARMS
 
-function removeAlarm(id) {
-  allSetAlarms = allSetAlarms.filter((alarm) => alarm.id !== id);
+let allSetAlarms = [];
+
+// FUNCTIONS TO MANIPULATE ALL ALARMS ARRAY
+
+function addAlarm(time, label, audio) {
+  const newAlarm = new Alarm(time, label, audio);
+  allSetAlarms.push(newAlarm);
+  renderAlarms();
+  setAlarmElement.style.display = 'none';
+}
+
+function editAlarm(id, newTime, newLabel, newAudio) {
+  const alarm = allSetAlarms.find((alarm) => alarm.id === id);
+  if (alarm) {
+    alarm.time = newTime;
+    alarm.label = newLabel;
+    alarm.audio = newAudio;
+    renderAlarms();
+  }
+  editAlarmElement.style.display = 'none';
+}
+
+function snoozeAlarm(id) {
+  const alarm = allSetAlarms.find((alarm) => alarm.id === id);
+  if (alarm) {
+    alarm.snooze();
+    renderAlarms();
+  }
+  alarmElement.style.display = 'none';
+  alarmSoundElement.pause();
+}
+
+function dismissAlarm(id) {
+  const alarm = allSetAlarms.find((alarm) => alarm.id === id);
+  if (alarm) {
+    alarm.dismiss();
+  }
   renderAlarms();
 }
 
-function disableAlarm(id) {
-  let currentAlarmToDisable = allSetAlarms.find((alarm) => alarm.id === id);
-  currentAlarmToDisable.disabled = true;
-}
-
-let currentAlarmToEdit;
-function editAlarm(id) {
-  currentAlarmToEdit = allSetAlarms.find((alarm) => alarm.id === id);
-}
-
-function addAlarm(element) {
-  allSetAlarms.push(element);
+function removeAlarm(alarmId) {
+  allSetAlarms = allSetAlarms.filter((alarm) => alarm.id !== alarmId);
   renderAlarms();
 }
 
-function modifyAlarmTime(index, newTime) {
-  allSetAlarms[index].time = newTime;
-  renderAlarms();
-}
+// FUNCTIONS TO CREATE BUTTONS FOR EACH ALARM IN LIST
 
 function createDeleteButton(alarmId) {
-  let button = document.createElement('button');
+  const button = document.createElement('button');
   button.innerText = 'Delete';
   button.addEventListener('click', () => removeAlarm(alarmId));
   return button;
 }
 
-function createDisableButton(alarmId) {
-  let button = document.createElement('button');
-  button.innerText = 'Disable';
+function createToggleEnableDisableButton(alarmId) {
+  const button = document.createElement('button');
+  const alarm = allSetAlarms.find((alarm) => alarm.id === alarmId);
+  button.innerText = alarm.dismissed ? 'Enable' : 'Disable';
+
   button.addEventListener('click', () => {
-    disableAlarm(alarmId);
-    alarmElement.style.display = 'none';
-    alarmSoundElement.pause();
+    if (!alarm.dismissed) {
+      alarm.dismiss();
+      if (alarm.isPlaying) {
+        alarm.isPlaying = false;
+        alarmSoundElement.pause();
+        alarmElement.style.display = 'none';
+      }
+      button.innerText = 'Enable';
+    } else {
+      alarm.enable();
+      button.innerText = 'Disable';
+    }
+    renderAlarms();
   });
   return button;
 }
 
 function createEditButton(alarmId) {
-  let button = document.createElement('button');
+  const button = document.createElement('button');
   button.innerText = 'Edit';
   button.addEventListener('click', () => {
-    editAlarm(alarmId);
-    editAlarmElement.style.display = 'block';
-    setAlarmElement.style.display = 'none';
+    currentAlarmIdToEdit = alarmId;
+    const alarm = allSetAlarms.find((alarm) => alarm.id === alarmId);
+    if (alarm) {
+      editAlarmTimeElement.value = alarm.time;
+      editLabelElement.value = alarm.label;
+      editSoundChoiceElement.value = alarm.audio;
+      editAlarmElement.style.display = 'block';
+      setAlarmElement.style.display = 'none';
+    }
   });
   return button;
 }
 
+//  FUNCTION TO RE-RENDER LIST WHEN ARRAY CHANGES
+
 function renderAlarms() {
   currentAlarmsListSetElement.innerHTML = '';
-  currentAlarmsListEditElement.innerHTML = '';
 
   allSetAlarms.forEach((alarm) => {
     let hours = alarm.time.split(':')[0];
@@ -118,7 +177,7 @@ function renderAlarms() {
     listItem.innerText = `${formattedTime} - ${alarm.label}`;
 
     let deleteButton = createDeleteButton(alarm.id);
-    let disableButton = createDisableButton(alarm.id);
+    let disableButton = createToggleEnableDisableButton(alarm.id);
     let editButton = createEditButton(alarm.id);
 
     listItem.appendChild(editButton);
@@ -126,21 +185,12 @@ function renderAlarms() {
     listItem.appendChild(deleteButton);
     currentAlarmsListSetElement.appendChild(listItem);
 
-    let listItemClone = document.createElement('li');
-    listItemClone.textContent = `${formattedTime} - ${alarm.label}`;
-
-    let deleteButtonClone = createDeleteButton(alarm.id);
-    let disableButtonClone = createDisableButton(alarm.id);
-    let editButtonClone = createEditButton(alarm.id);
-
-    listItemClone.appendChild(editButtonClone);
-    listItemClone.appendChild(disableButtonClone);
-    listItemClone.appendChild(deleteButtonClone);
-    currentAlarmsListEditElement.appendChild(listItemClone);
+    console.log(allSetAlarms);
   });
 }
 
-// OPENING NEW ALARM FORM
+// DISPLAYING ADD ALARM AND EXITING OUT OF SET AND EDIT ALARM
+
 toggleSetAlarmElement.addEventListener('click', () => {
   setAlarmElement.style.display = 'block';
 });
@@ -151,124 +201,51 @@ cancelEditAlarmElement.addEventListener('click', () => {
   editAlarmElement.style.display = 'none';
 });
 
-// HANDLING FORM DATA
-let alarmTime;
-let alarmLabel = null;
-let alarmSoundSrc = soundChoiceElement.value;
-
-let editAlarmTime;
-let editAlarmLabel = null;
-let editAlarmSoundSrc = editSoundChoiceElement.value;
-
-alarmTimeElement.addEventListener('input', () => {
-  if (Number(alarmTimeElement.value.split(':')[0]) > 12) {
-    let alarmTimeHourNumber = Number(alarmTimeElement.value.split(':')[0]) - 12;
-    alarmTime = `${alarmTimeHourNumber}:${
-      alarmTimeElement.value.split(':')[1]
-    }`;
-  } else {
-    alarmTime = `${parseInt(alarmTimeElement.value.split(':')[0], 10)}:${
-      alarmTimeElement.value.split(':')[1]
-    }`;
-  }
-});
-
-editAlarmTimeElement.addEventListener('input', () => {
-  if (Number(editAlarmTimeElement.value.split(':')[0]) > 12) {
-    let alarmTimeHourNumber =
-      Number(editAlarmTimeElement.value.split(':')[0]) - 12;
-    editAlarmTime = `${alarmTimeHourNumber}:${
-      editAlarmTimeElement.value.split(':')[1]
-    }`;
-  } else {
-    editAlarmTime = `${parseInt(
-      editAlarmTimeElement.value.split(':')[0],
-      10
-    )}:${editAlarmTimeElement.value.split(':')[1]}`;
-  }
-});
-
-labelElement.addEventListener('input', () => {
-  alarmLabel = labelElement.value;
-});
-editLabelElement.addEventListener('input', () => {
-  editAlarmLabel = editLabelElement.value;
-});
-
-soundChoiceElement.addEventListener('change', () => {
-  alarmSoundSrc = soundChoiceElement.value;
-});
-editSoundChoiceElement.addEventListener('change', () => {
-  editAlarmSoundSrc = editSoundChoiceElement.value;
-});
+// HANDLING DISMISS AND SNOOZE BUTTONS
 
 dismissElement.addEventListener('click', () => {
-  let alarmGoingOff = allSetAlarms.findIndex((alarm) => {
-    return !alarm.dismissed && alarm.time === currentTimeForAlarm;
-  });
-  if (alarmGoingOff) {
-    alarmGoingOff.dismissed = true;
-  }
-  alarmElement.style.display = 'none';
-  alarmSoundElement.pause();
-
-  /*  
-DISABLE IT AS WELL ***
-
-   */
+  const playingAlarmId = allSetAlarms.find((alarm) => alarm.isPlaying).id;
+  dismissAlarm(playingAlarmId);
 });
 
 snoozeElement.addEventListener('click', () => {
-  let now = new Date();
-  now.setMinutes(now.getMinutes() + 5);
-
-  let hours = now.getHours();
-  let minutes = now.getMinutes();
-
-  if (hours > 12) {
-    hours -= 12;
-  }
-
-  let snoozeTime = `${hours.toString()}:${minutes.toString().padStart(2, '0')}`;
-
-  let alarmGoingOffIndex = allSetAlarms.findIndex((alarm) => {
-    return !alarm.dismissed && alarm.time === currentTimeForAlarm;
-  });
-
-  if (alarmGoingOffIndex !== -1) {
-    allSetAlarms[alarmGoingOffIndex].isPlaying = false;
-    allSetAlarms[alarmGoingOffIndex].time = snoozeTime;
-    renderAlarms();
-  }
-
-  alarmElement.style.display = 'none';
-  alarmSoundElement.pause();
+  const playingAlarmId = allSetAlarms.find((alarm) => alarm.isPlaying).id;
+  snoozeAlarm(playingAlarmId);
 });
 
 // LOGIC FOR SUBMITTING NEW ALARM FORM
+
 submitSetAlarmElement.addEventListener('click', () => {
-  const newAlarm = new Alarm(alarmTime, alarmLabel, alarmSoundSrc);
-  addAlarm(newAlarm);
+  event.preventDefault();
+  const time = alarmTimeElement.value;
+  const label = labelElement.value;
+  const audio = soundChoiceElement.value;
+  addAlarm(time, label, audio);
 });
 
 // LOGIC FOR SUBMITTING EDIT ALARM FORM
+
+let currentAlarmIdToEdit = null;
+
 submitEditAlarmElement.addEventListener('click', () => {
-  console.log(currentAlarmToEdit);
-  currentAlarmToEdit.time = editAlarmTime;
-  currentAlarmToEdit.label = editAlarmLabel;
-  currentAlarmToEdit.audio = editAlarmSoundSrc;
-  console.log(alarmTime);
-  console.log(currentAlarmToEdit);
-  console.log(upcomingAlarms);
-  renderAlarms();
+  event.preventDefault();
+  if (currentAlarmIdToEdit !== null) {
+    const newTime = editAlarmTimeElement.value;
+    const newLabel = editLabelElement.value;
+    const newAudio = editSoundChoiceElement.value;
+    editAlarm(currentAlarmIdToEdit, newTime, newLabel, newAudio);
+  }
 });
+
+// LOGIC FOR REMOVING ALARM FROM ARRAY IN EDIT MENU
 
 manualDeleteButton.addEventListener('click', () => {
   event.preventDefault();
-  console.log(allSetAlarms);
-  allSetAlarms = allSetAlarms.filter((alarm) => alarm !== currentAlarmToEdit);
-  console.log(allSetAlarms);
-  renderAlarms();
+  if (currentAlarmIdToEdit !== null) {
+    removeAlarm(currentAlarmIdToEdit);
+    editAlarmElement.style.display = 'none';
+    currentAlarmIdToEdit = null;
+  }
 });
 
 // GETTING USER LOCATION AND FETCHING TEMPERATURE FROM API
@@ -288,57 +265,51 @@ function showPosition(position) {
     });
 }
 
+// GETTING AND DISPLAYING THE DATE
+
 let month = now.getMonth() + 1;
 let dayOfMonth = now.getDate();
 let date = `${month}/${dayOfMonth}`;
 dateElement.innerHTML = date;
 
-let currentTimeForAlarm;
-// UPDATING THE TIME EVERY .5 SECONDS
-function updateCurrentDate() {
-  let now = new Date();
-  let originalHour = now.getHours();
-  originalHour = originalHour.toString().padStart(2, '0');
-  originalHour > 12
-    ? (originalHour = `${Number(originalHour - 12)}`)
-    : (originalHour = originalHour);
-  let originalMinute = now.getMinutes();
-  originalMinute = originalMinute.toString().padStart(2, '0');
-  let originalSecond = now.getSeconds();
-  originalSecond = originalSecond.toString().padStart(2, '0');
-  let fullTimeString = `${originalHour}:${originalMinute}:${originalSecond}`;
-  timeElement.innerHTML = fullTimeString;
+// COMPARING THE TIME AND ALARM TIME
 
-  // ALARM GOING OFF LOGIC
-  currentTimeForAlarm = `${originalHour}:${originalMinute}`;
+let currentTimeForAlarm;
+
+function updateCurrentTimeAndCheckAlarms() {
+  const now = new Date();
+  const currentTimeString = `${now.getHours().toString().padStart(2, '0')}:${now
+    .getMinutes()
+    .toString()
+    .padStart(2, '0')}`;
   allSetAlarms.forEach((alarm) => {
     if (
-      alarm.time === currentTimeForAlarm &&
-      alarm.dismissed === false &&
+      !alarm.dismissed &&
+      alarm.time === currentTimeString &&
       !alarm.isPlaying
     ) {
+      alarm.isPlaying = true;
       alarmElement.style.display = 'block';
-      alarmSoundElement.setAttribute('src', alarm.audio);
-      if (alarm.dismissed === false && alarmSoundElement.paused) {
-        alarm.isPlaying = true;
-        alarmSoundElement.play();
-      }
-
-      alarmLabelElement.innerHTML = alarm.label;
-    } else if (
-      alarm.time === currentTimeForAlarm &&
-      alarm.dismissed === false &&
-      alarm.isPlaying
-    ) {
+      alarmSoundElement.src = alarm.audio;
+      alarmSoundElement.play();
+    } else if (alarm.time !== currentTimeString) {
       alarm.isPlaying = false;
     }
   });
+  setTimeout(updateCurrentTimeAndCheckAlarms, 500);
 }
-updateCurrentDate();
 
-setInterval(updateCurrentDate, 500);
+// DISPLAYING THE CURRENT TIME
 
-// I want submit to close the form
-// I want the alarm noise to keep going off until the minute is over
-// WHen i snooze i want it to visually update on screen
-// Make dismiss button disable it
+function updateCurrentTime() {
+  const now = new Date();
+  const hours = now.getHours().toString().padStart(2, '0');
+  const minutes = now.getMinutes().toString().padStart(2, '0');
+  const seconds = now.getSeconds().toString().padStart(2, '0');
+  const timeString = `${hours}:${minutes}:${seconds}`;
+  timeElement.textContent = timeString;
+}
+setInterval(updateCurrentTime, 500);
+
+updateCurrentTime();
+updateCurrentTimeAndCheckAlarms();
