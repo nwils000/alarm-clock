@@ -290,8 +290,10 @@ function updateCurrentTimeAndCheckAlarms() {
     ) {
       alarm.isPlaying = true;
       alarmElement.style.display = 'block';
+      alarmLabelElement.textContent = alarm.label;
       alarmSoundElement.src = alarm.audio;
       alarmSoundElement.play();
+      alarmLabelElement.style.display = 'block';
     } else if (alarm.time !== currentTimeString) {
       alarm.isPlaying = false;
     }

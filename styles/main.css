@@ -38,12 +38,17 @@ button {
   border-radius: 2rem 2rem 0 0;
 }
 
+.information {
+  font-size: 1.3rem;
+}
+
 .information,
 .bottom-upper-clock,
 .edit-alarm-top,
 .set-alarm-top {
   justify-content: space-between;
   display: flex;
+  align-items: center;
 }
 
 /* BUTTONS */
@@ -80,6 +85,7 @@ form div {
   align-items: center;
   display: flex;
   justify-content: space-between;
+  margin-bottom: 1rem;
 }
 
 .set-alarm input,
@@ -100,6 +106,10 @@ form div {
 .edit-alarm select:hover {
   cursor: pointer;
   border: 1px solid white;
+}
+
+label {
+  font-size: 1.3rem;
 }
 
 .alarm-time-label,
@@ -141,6 +151,10 @@ input[type='time']::-webkit-calendar-picker-indicator {
   background-color: #d9534f;
 }
 
+.manual-delete-button {
+  width: 100%;
+}
+
 button:hover {
   opacity: 0.8;
 }
@@ -168,6 +182,63 @@ button:hover {
   background-color: #3b5a7b;
 }
 
+/* ALARM SECTION */
+.alarm {
+  display: none;
+}
+
+.alarm-label {
+  text-align: center;
+}
+
+.alarm div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #333;
+
+  margin-top: 20px;
+  height: 20.2rem;
+  border-radius: 0 0 2rem 2rem;
+}
+
+.alarm h2 {
+  color: #fff;
+  position: relative;
+  top: 3rem;
+}
+
+.snooze-dismiss-wrapper {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-bottom: 3rem;
+}
+
+.alarm button {
+  font-size: 16px;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 5px;
+  margin: 5px;
+  cursor: pointer;
+}
+
+.snooze {
+  background-color: #4caf50;
+  color: #fff;
+}
+
+.dismiss {
+  background-color: #f44336;
+  color: #fff;
+}
+
+.alarm button:hover {
+  opacity: 0.8;
+}
+
 /* MISCELLANEOUS */
 ul {
   padding: 0;
@@ -180,11 +251,6 @@ h2 {
   font-weight: 500;
 }
 
-.lower-clock,
-.alarm {
+.lower-clock {
   padding: 1.5rem 2.3rem;
-}
-
-.alarm {
-  display: none;
 }
