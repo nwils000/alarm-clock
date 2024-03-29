@@ -31,8 +31,8 @@
             </div>
             <form>
               <div>
-                <label for="alarm-time">Time</label>
-                <input type="time" class="alarm-time" />
+                <label for="alarm-time" class="alarm-time-label">Time</label>
+                <input type="time" id="alarm-time" class="alarm-time" />
               </div>
               <div>
                 <label for="label">Label</label>
@@ -65,9 +65,16 @@
             </div>
             <form>
               <div>
-                <label for="edit-alarm-time">Time</label>
-                <input type="time" class="edit-alarm-time" />
+                <label for="edit-alarm-time" class="edit-alarm-time-label"
+                  >Time</label
+                >
+                <input
+                  type="time"
+                  id="edit-alarm-time"
+                  class="edit-alarm-time"
+                />
               </div>
+
               <div>
                 <label for="edit-label">Label</label>
                 <input type="text" id="edit-label" class="edit-label" />
