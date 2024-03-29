@@ -1,6 +1,6 @@
 // GLOBAL VARIABLES
 let clockElement = document.querySelector('.clock');
-let alarmElement = document.querySelector('.alarm');
+let alarmElement = document.querySelector('.alarm'); // active alarm prompt: dismissal and snooze
 let timeElement = document.querySelector('.time');
 let dateElement = document.querySelector('.date');
 let temperatureElement = document.querySelector('.temperature');
@@ -33,25 +33,37 @@ let now = new Date();
 // ALARM CONSTRUCTOR
 
 class Alarm {
+
   static lastId = 0;
+
   constructor(time, label, audio) {
-    this.id = ++Alarm.lastId;
+    this.id = ++Alarm.lastId; // this looked real weird at first glance but it works, so that is cool. Good use of static properties.
+    console.log({id: this.id})
     this.time = time;
+    this.setAlarm(time);
     this.label = label;
     this.audio = audio;
     this.dismissed = false;
     this.isPlaying = false;
   }
+
+  setAlarm(time) {
+    // I would probably create a setTimeout in here and let it handle its own firing -
+    // instead of looping through the whole list every half 2nd, as that is computationally expensive and hard to debug
+  }
+
   snooze() {
     let [hours, minutes] = this.time.split(':').map((x) => parseInt(x));
+
     minutes += 5;
+
     if (minutes >= 60) {
       hours = (hours + 1) % 24;
       minutes -= 60;
     }
-    this.time = `${hours.toString().padStart(2, '0')}:${minutes
-      .toString()
-      .padStart(2, '0')}`;
+
+    this.time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+
     this.dismissed = false;
     this.isPlaying = false;
   }
@@ -62,6 +74,7 @@ class Alarm {
     alarmElement.style.display = 'none';
     alarmSoundElement.pause();
   }
+
   enable() {
     this.dismissed = false;
   }
@@ -77,7 +90,7 @@ function addAlarm(time, label, audio) {
   const newAlarm = new Alarm(time, label, audio);
   allSetAlarms.push(newAlarm);
   renderAlarms();
-  setAlarmElement.style.display = 'none';
+  setAlarmElement.style.display = 'none'; // if you use a dialogue html element you could get this for free
 }
 
 function editAlarm(id, newTime, newLabel, newAudio) {
@@ -88,6 +101,10 @@ function editAlarm(id, newTime, newLabel, newAudio) {
     alarm.audio = newAudio;
     renderAlarms();
   }
+  // Something to consider for later in terms of app user experience design. -
+  // If this statement were ever false, that means you have gotten your app into a weird state. -
+  // For this app it probably doesn't matter, but this would be a good opportunity to show the user an error message and -
+  // could require you to get your app back into a "non-errored state". (e.g. to clean up events on or markup for a deleted item)
   editAlarmElement.style.display = 'none';
 }
 
@@ -119,6 +136,9 @@ function removeAlarm(alarmId) {
 function createDeleteButton(alarmId) {
   const button = document.createElement('button');
   button.innerText = 'Delete';
+  // because you apply this to every element in the list and because this function is anonymous,-
+  // you could run into a memory issues when the list is sufficiently large.
+  // https://developer.mozilla.org/en-US/docs/Web/API/EventTarget/addEventListener#:~:text=a%20second%20time.-,Note,-%3A%20If%20a
   button.addEventListener('click', () => removeAlarm(alarmId));
   return button;
 }
@@ -127,7 +147,7 @@ function createToggleEnableDisableButton(alarmId) {
   const button = document.createElement('button');
   const alarm = allSetAlarms.find((alarm) => alarm.id === alarmId);
   button.innerText = alarm.dismissed ? 'Enable' : 'Disable';
-
+  // same anonymous function event listener problem, see line 129
   button.addEventListener('click', () => {
     if (!alarm.dismissed) {
       alarm.dismiss();
@@ -149,6 +169,7 @@ function createToggleEnableDisableButton(alarmId) {
 function createEditButton(alarmId) {
   const button = document.createElement('button');
   button.innerText = 'Edit';
+  // same anonymous function event listener problem, see line 129
   button.addEventListener('click', () => {
     currentAlarmIdToEdit = alarmId;
     const alarm = allSetAlarms.find((alarm) => alarm.id === alarmId);
@@ -210,6 +231,7 @@ dismissElement.addEventListener('click', () => {
 
 snoozeElement.addEventListener('click', () => {
   const playingAlarmId = allSetAlarms.find((alarm) => alarm.isPlaying).id;
+  // I am not 100% sure but if two alarms are firing at the same time this would just find 1 of them, could lead to a bug
   snoozeAlarm(playingAlarmId);
 });
 
@@ -227,9 +249,15 @@ submitSetAlarmElement.addEventListener('click', () => {
 
 let currentAlarmIdToEdit = null;
 
-submitEditAlarmElement.addEventListener('click', () => {
+submitEditAlarmElement.addEventListener('click', (event) => {
   event.preventDefault();
   if (currentAlarmIdToEdit !== null) {
+    // these elements references work well for this simple, one page app.
+    // however; if you wanted to more easily make this logic transportable you
+    // could make it so that this event is tied to the form submission event, which
+    // would give you access to the form data and would decouple the "div hell"
+    // that you mentioned experiencing
+    // https://developer.mozilla.org/en-US/docs/Web/API/HTMLFormElement/submit_event
     const newTime = editAlarmTimeElement.value;
     const newLabel = editLabelElement.value;
     const newAudio = editSoundChoiceElement.value;
@@ -282,6 +310,7 @@ function updateCurrentTimeAndCheckAlarms() {
     .getMinutes()
     .toString()
     .padStart(2, '0')}`;
+
   allSetAlarms.forEach((alarm) => {
     if (
       !alarm.dismissed &&
