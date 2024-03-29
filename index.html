@@ -10,91 +10,95 @@
     <div class="content">
       <div class="clock">
         <div class="upper-clock">
-          <button class="toggle-set-alarm">+</button>
           <div class="information">
             <p class="date"></p>
             <p class="time"></p>
 
             <p class="temperature">Loading</p>
           </div>
-        </div>
-        <div class="lower-clock"></div>
-        <ul class="current-alarms-list-set"></ul>
-        <div class="set-alarm">
-          <div class="set-alarm-top">
-            <button class="cancel-set-alarm">X</button>
-            <h2>Add Alarm</h2>
-            <button class="submit-set-alarm">Save</button>
+          <div class="bottom-upper-clock">
+            <h1>Alarms</h1>
+            <button class="toggle-set-alarm">+</button>
           </div>
-          <form>
-            <div>
-              <label for="alarm-time">Time</label>
-              <input type="time" class="alarm-time" />
-            </div>
-            <div>
-              <label for="label">Label</label>
-              <input type="text" id="label" class="label" />
-            </div>
-            <div>
-              <label for="sound-choice">Sound</label>
-              <select id="sound-choice" class="sound-choice">
-                <option class="classic-alarm" value="./assets/classic.mp3">
-                  Classic
-                </option>
-                <option class="electro-alarm" value="./assets/electro.mp3">
-                  Electro
-                </option>
-                <option
-                  class="school-bell-alarm"
-                  value="./assets/school-bell.mp3"
-                >
-                  School Bell
-                </option>
-              </select>
-            </div>
-          </form>
         </div>
-        <div class="edit-alarm">
-          <div class="edit-alarm-top">
-            <button class="cancel-edit-alarm">X</button>
-            <h2>Edit Alarm</h2>
-            <button class="submit-edit-alarm">Save</button>
+        <div class="lower-clock">
+          <ul class="current-alarms-list-set"></ul>
+          <div class="set-alarm">
+            <div class="set-alarm-top">
+              <button class="cancel-set-alarm">Cancel</button>
+              <h2>Add Alarm</h2>
+              <button class="submit-set-alarm">Save</button>
+            </div>
+            <form>
+              <div>
+                <label for="alarm-time">Time</label>
+                <input type="time" class="alarm-time" />
+              </div>
+              <div>
+                <label for="label">Label</label>
+                <input type="text" id="label" class="label" />
+              </div>
+              <div>
+                <label for="sound-choice">Sound</label>
+                <select id="sound-choice" class="sound-choice">
+                  <option class="classic-alarm" value="./assets/classic.mp3">
+                    Classic
+                  </option>
+                  <option class="electro-alarm" value="./assets/electro.mp3">
+                    Electro
+                  </option>
+                  <option
+                    class="school-bell-alarm"
+                    value="./assets/school-bell.mp3"
+                  >
+                    School Bell
+                  </option>
+                </select>
+              </div>
+            </form>
           </div>
-          <form>
-            <div>
-              <label for="edit-alarm-time">Time</label>
-              <input type="time" class="edit-alarm-time" />
+          <div class="edit-alarm">
+            <div class="edit-alarm-top">
+              <button class="cancel-edit-alarm">Cancel</button>
+              <h2>Edit Alarm</h2>
+              <button class="submit-edit-alarm">Save</button>
             </div>
-            <div>
-              <label for="edit-label">Label</label>
-              <input type="text" id="edit-label" class="edit-label" />
-            </div>
-            <div>
-              <label for="edit-sound-choice">Sound</label>
-              <select id="edit-sound-choice" class="edit-sound-choice">
-                <option class="classic-alarm" value="./assets/classic.mp3">
-                  Classic
-                </option>
-                <option class="electro-alarm" value="./assets/electro.mp3">
-                  Electro
-                </option>
-                <option
-                  class="school-bell-alarm"
-                  value="./assets/school-bell.mp3"
-                >
-                  School Bell
-                </option>
-              </select>
-            </div>
-            <button class="manual-delete-button">Delete</button>
-          </form>
+            <form>
+              <div>
+                <label for="edit-alarm-time">Time</label>
+                <input type="time" class="edit-alarm-time" />
+              </div>
+              <div>
+                <label for="edit-label">Label</label>
+                <input type="text" id="edit-label" class="edit-label" />
+              </div>
+              <div>
+                <label for="edit-sound-choice">Sound</label>
+                <select id="edit-sound-choice" class="edit-sound-choice">
+                  <option class="classic-alarm" value="./assets/classic.mp3">
+                    Classic
+                  </option>
+                  <option class="electro-alarm" value="./assets/electro.mp3">
+                    Electro
+                  </option>
+                  <option
+                    class="school-bell-alarm"
+                    value="./assets/school-bell.mp3"
+                  >
+                    School Bell
+                  </option>
+                </select>
+              </div>
+              <button class="manual-delete-button">Delete</button>
+            </form>
+          </div>
         </div>
-      </div>
-      <div class="alarm">
-        <audio class="alarm-sound"></audio>
-        <h2 class="alarm-label"></h2>
-        <button class="snooze">5 Minute Snooze</button>
-        <button class="dismiss">Dismiss</button>
+        <div class="alarm">
+          <audio class="alarm-sound"></audio>
+          <h2 class="alarm-label"></h2>
+          <button class="snooze">5 Minute Snooze</button>
+          <button class="dismiss">Dismiss</button>
+        </div>
       </div>
       <script defer src="./scripts/script.js"></script>
     </div>
