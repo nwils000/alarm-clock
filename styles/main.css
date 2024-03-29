@@ -20,7 +20,7 @@ button {
 .content {
   background-color: rgb(15, 15, 15);
   position: relative;
-  width: 20rem;
+  width: 25rem;
   height: 40rem;
   border-radius: 2rem;
   color: white;
@@ -55,8 +55,17 @@ ul {
 
 .set-alarm {
   height: 40rem;
-  z-index: 0;
   position: absolute;
+  top: 0px;
+  width: 100%;
+  left: 0;
+  background-color: rgb(37, 37, 37);
+  border-radius: 2rem;
+}
+.edit-alarm {
+  height: 40rem;
+  position: absolute;
+  z-index: 10;
   top: 0px;
   width: 100%;
   left: 0;
@@ -69,6 +78,12 @@ h2 {
 }
 
 .set-alarm-top {
+  background-color: rgb(37, 37, 37);
+  padding: 1.15rem 2.3rem;
+  color: white;
+  border-radius: 2rem 2rem 0 0;
+}
+.edit-alarm-top {
   background-color: rgb(37, 37, 37);
   padding: 1.15rem 2.3rem;
   color: white;
