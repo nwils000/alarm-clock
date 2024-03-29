@@ -1,7 +1,53 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.content {
+  background-color: rgba(0, 0, 0, 0.505);
+  padding: 1.5rem 2.3rem;
+  border-radius: 2rem;
+  position: relative;
+  width: 20rem;
+  height: 40rem;
+}
+
+.toggle-set-alarm {
+  position: absolute;
+  right: 1.2rem;
+  top: 1.2rem;
+}
+
+.information {
+  display: flex;
+  justify-content: space-between;
+  padding-top: 1.5rem;
+}
+
+.edit-alarm-top {
+  display: flex;
+  justify-content: space-between;
+}
+.set-alarm-top {
+  display: flex;
+  justify-content: space-between;
+}
+
 .set-alarm {
+  display: none;
+}
+
+.edit-alarm {
   display: none;
 }
 
 .alarm {
   display: none;
+}
+
+form div {
+  display: flex;
+  justify-content: space-between;
 }
