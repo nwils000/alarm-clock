@@ -53,6 +53,32 @@ ul {
   list-style: none;
 }
 
+.set-alarm {
+  height: 40rem;
+  z-index: 0;
+  position: absolute;
+  top: 0px;
+  width: 100%;
+  left: 0;
+  background-color: rgb(37, 37, 37);
+  border-radius: 2rem;
+}
+
+h2 {
+  font-size: 1rem;
+}
+
+.set-alarm-top {
+  background-color: rgb(37, 37, 37);
+  padding: 1.15rem 2.3rem;
+  color: white;
+  border-radius: 2rem 2rem 0 0;
+}
+
+form {
+  padding: 1.15rem 2.3rem;
+}
+
 .toggle-set-alarm {
   font-size: 2rem;
   font-weight: 400;
