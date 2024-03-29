@@ -1,130 +1,161 @@
+/* BASE STYLES */
 body {
   display: flex;
+  height: 100vh;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 300;
 }
 
 button {
+  cursor: pointer;
+  padding: 0;
+  border: none;
   background: none;
   color: inherit;
-  border: none;
-  padding: 0;
   font: inherit;
-  cursor: pointer;
   outline: inherit;
 }
 
+/* CONTENT */
 .content {
-  background-color: rgb(15, 15, 15);
-  position: relative;
-  width: 25rem;
+  width: 34rem;
   height: 40rem;
+  position: relative;
   border-radius: 2rem;
   color: white;
+  background-color: rgb(15, 15, 15);
 }
 
-.information {
-  display: flex;
-  justify-content: space-between;
-}
-
-.upper-clock {
+/* CLOCK SECTIONS */
+.upper-clock,
+.set-alarm-top,
+.edit-alarm-top {
+  color: white;
   padding: 1rem 2.3rem;
   background-color: rgb(37, 37, 37);
-  color: white;
   border-radius: 2rem 2rem 0 0;
 }
 
-.bottom-upper-clock {
-  display: flex;
-  justify-content: space-between;
-}
-
-h1 {
-  font-weight: 500;
-}
-
-ul {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-.set-alarm {
-  height: 40rem;
-  position: absolute;
-  top: 0px;
-  width: 100%;
-  left: 0;
-  background-color: rgb(37, 37, 37);
-  border-radius: 2rem;
-}
-.edit-alarm {
-  height: 40rem;
-  position: absolute;
-  z-index: 10;
-  top: 0px;
-  width: 100%;
-  left: 0;
-  background-color: rgb(37, 37, 37);
-  border-radius: 2rem;
-}
-
-h2 {
-  font-size: 1rem;
-}
-
+.information,
+.bottom-upper-clock,
+.edit-alarm-top,
 .set-alarm-top {
-  background-color: rgb(37, 37, 37);
-  padding: 1.15rem 2.3rem;
-  color: white;
-  border-radius: 2rem 2rem 0 0;
+  justify-content: space-between;
+  display: flex;
 }
-.edit-alarm-top {
-  background-color: rgb(37, 37, 37);
-  padding: 1.15rem 2.3rem;
+
+/* BUTTONS */
+.toggle-set-alarm {
+  font-weight: 400;
+  font-size: 2rem;
+}
+
+/* ALARM FORMS */
+.set-alarm,
+.edit-alarm {
+  display: none;
+  top: 0;
+  left: 0;
+  width: 31.4rem;
+  height: 37.5rem;
+  position: absolute;
+  padding: 20px;
+  z-index: 0;
   color: white;
-  border-radius: 2rem 2rem 0 0;
+  background-color: rgb(37, 37, 37);
+  border-radius: 2rem;
+}
+
+.edit-alarm {
+  z-index: 10;
 }
 
 form {
   padding: 1.15rem 2.3rem;
 }
 
-.toggle-set-alarm {
-  font-size: 2rem;
-  font-weight: 400;
+form div {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
 }
 
-.lower-clock {
+.set-alarm input,
+.edit-alarm input,
+.set-alarm select,
+.edit-alarm select {
+  padding: 10px;
+  width: 50%;
+  border: 1px solid #555;
+  border-radius: 5px;
+  color: #ddd;
+  background-color: #222;
+}
+
+.set-alarm button,
+.edit-alarm button {
+  color: #fff;
+  height: 3rem;
+  padding: 0 20px;
+  border-radius: 5px;
+  background-color: #5cb85c;
+  border: none;
+  cursor: pointer;
+}
+
+.set-alarm .cancel-set-alarm,
+.edit-alarm .cancel-edit-alarm,
+.set-alarm .manual-delete-button,
+.edit-alarm .manual-delete-button {
+  background-color: #d9534f;
+}
+
+button:hover {
+  opacity: 0.8;
+}
+
+/* ALARMS LIST */
+.current-alarms-list-set li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  background-color: #2f2f2f;
+}
+
+.current-alarms-list-set button {
+  padding: 5px 10px;
+  margin: 0 5px;
+  color: white;
+  border-radius: 5px;
+  background-color: #4a76a8;
+}
+
+.current-alarms-list-set button:hover {
+  background-color: #3b5a7b;
+}
+
+/* MISCELLANEOUS */
+ul {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+h1,
+h2 {
+  font-weight: 500;
+}
+
+.lower-clock,
+.alarm {
   padding: 1.5rem 2.3rem;
-}
-
-.edit-alarm-top {
-  display: flex;
-  justify-content: space-between;
-}
-.set-alarm-top {
-  display: flex;
-  justify-content: space-between;
-}
-
-.set-alarm {
-  display: none;
-}
-
-.edit-alarm {
-  display: none;
 }
 
 .alarm {
   display: none;
-}
-
-form div {
-  display: flex;
-  justify-content: space-between;
 }
