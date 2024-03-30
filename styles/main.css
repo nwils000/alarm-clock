@@ -6,6 +6,7 @@ body {
   align-items: center;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   font-weight: 300;
+  background-color: #f9f9f9;
 }
 
 button {
@@ -23,6 +24,7 @@ button {
   border-radius: 2rem;
   color: white;
   background-color: rgb(15, 15, 15);
+  box-shadow: 0px 0px 23px 0px rgba(0, 0, 0, 0.75);
 }
 
 /* CLOCK SECTIONS */
@@ -87,6 +89,9 @@ form div {
   display: flex;
   justify-content: space-between;
   margin-bottom: 1rem;
+  border-radius: 10px;
+  padding: 1rem;
+  border: 1px solid rgb(55, 55, 55);
 }
 
 .set-alarm input,
@@ -118,6 +123,10 @@ label {
   display: block;
   cursor: pointer;
   position: relative;
+}
+
+input[type='text']:hover {
+  cursor: text;
 }
 
 input[type='time'] {

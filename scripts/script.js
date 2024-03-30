@@ -33,12 +33,11 @@ let now = new Date();
 // ALARM CONSTRUCTOR
 
 class Alarm {
-
   static lastId = 0;
 
   constructor(time, label, audio) {
     this.id = ++Alarm.lastId; // this looked real weird at first glance but it works, so that is cool. Good use of static properties.
-    console.log({id: this.id})
+    console.log({ id: this.id });
     this.time = time;
     this.setAlarm(time);
     this.label = label;
@@ -62,7 +61,9 @@ class Alarm {
       minutes -= 60;
     }
 
-    this.time = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}`;
+    this.time = `${hours.toString().padStart(2, '0')}:${minutes
+      .toString()
+      .padStart(2, '0')}`;
 
     this.dismissed = false;
     this.isPlaying = false;
@@ -325,6 +326,7 @@ function updateCurrentTimeAndCheckAlarms() {
       alarmLabelElement.style.display = 'block';
     } else if (alarm.time !== currentTimeString) {
       alarm.isPlaying = false;
+      alarmElement.style.display = 'none';
     }
   });
   setTimeout(updateCurrentTimeAndCheckAlarms, 500);
@@ -334,9 +336,13 @@ function updateCurrentTimeAndCheckAlarms() {
 
 function updateCurrentTime() {
   const now = new Date();
-  const hours = now.getHours().toString().padStart(2, '0');
+  let hours = now.getHours();
   const minutes = now.getMinutes().toString().padStart(2, '0');
   const seconds = now.getSeconds().toString().padStart(2, '0');
+  hours = hours > 12 ? hours - 12 : hours;
+  hours = hours === 0 ? 12 : hours;
+  hours = hours.toString().padStart(2, '0');
+
   const timeString = `${hours}:${minutes}:${seconds}`;
   timeElement.textContent = timeString;
 }
