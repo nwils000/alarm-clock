@@ -193,7 +193,10 @@ function renderAlarms() {
   allSetAlarms.forEach((alarm) => {
     let hours = alarm.time.split(':')[0];
     let minutes = alarm.time.split(':')[1];
-    let formattedHours = parseInt(hours, 10).toString();
+    let formattedHours = parseInt(hours, 10);
+    formattedHours = formattedHours > 12 ? formattedHours - 12 : formattedHours;
+    formattedHours = formattedHours === 0 ? 12 : formattedHours;
+    formattedHours = formattedHours.toString().padStart(2, '0');
     let formattedTime = `${formattedHours}:${minutes}`;
     let listItem = document.createElement('li');
     listItem.innerText = `${formattedTime} - ${alarm.label}`;
